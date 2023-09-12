@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<link rel="stylesheet"
+	href="https://unpkg.com/primeflex@^3/primeflex.css" />
+
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+				Sistema de Cadastro
+		</ui:define>
+
+	<ui:define name="conteudo">
+
+		<!-- TAB CADASTRO -->
+
+		<p:tabView id="tabV" activeIndex="0" widgetVar="tabIndice">
+			<p:tab title="Cadastrar" id="tab1">
+				<h:form id="cadastro">
+					<p:messages id="messages" />
+					<p:fieldset legend="Cadastro Pessoal">
+						<div class="flex flex-wrap justify-content-end">
+							<p:commandButton value="Editar"
+								rendered="#{cadastroBean.eEditavel}"
+								actionListener="#{cadastroBean.ativaCampos}" update="@form"
+								process="@this cadastro" />
+						</div>
+						<div class="grid ui-fluid mt-3 ">
+							<div class="col-12 md:col-6">
+
+								<div class="field">
+									<p:outputLabel value="Nome:" for="nome" />
+									<p:inputText id="nome" value="#{cadastroBean.pessoa.nome}"
+										validator="#{validators.validaInput}" required="True"
+										requiredMessage="Necessário Nome"
+										disabled="#{cadastroBean.eEditavel}">
+										<f:ajax event="blur" render="messages" />
+									</p:inputText>
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="RG: " for="rg" />
+									<p:inputMask id="rg" value="#{cadastroBean.pessoa.rg}"
+										mask="99.999.999" required="True"
+										requiredMessage="Necessário RG"
+										disabled="#{cadastroBean.eEditavel}">
+										<f:ajax event="blur" render="messages" />
+									</p:inputMask>
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="CPF: " for="cpf" />
+									<p:inputMask id="cpf" value="#{cadastroBean.pessoa.cpf}"
+										mask="999.999.999-99" required="True"
+										requiredMessage="Necessário CPF"
+										validator="#{validators.validarCPF}"
+										disabled="#{cadastroBean.eEditavel}">
+										<f:ajax event="blur" render="messages" />
+									</p:inputMask>
+
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="Data de Nascimento: " for="dataNasc" />
+									<p:calendar id="dataNasc"
+										value="#{cadastroBean.pessoa.dataNasc.time}"
+										pattern="dd/MM/yyyy" mask="true" timeZone="America/Sao_Paulo"
+										showOn="button" disabled="#{cadastroBean.eEditavel}">
+									</p:calendar>
+								</div>
+							</div>
+
+							<div class="col-12 md:col-6">
+								<div class="field">
+									<p:outputLabel for="nacionalidade " value="Cor: " />
+									<p:selectOneMenu value="#{cadastroBean.pessoa.nacionalidade}"
+										id="nacionalidade" disabled="#{cadastroBean.eEditavel}">
+										<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+										<f:selectItems itemLabel="#{nacionalidade.descricao}"
+											value="#{cadastroBean.nacionalidades}"
+											itemValue="#{nacionalidade}" var="nacionalidade" />
+									</p:selectOneMenu>
+								</div>
+
+								<div class="field mb-3">
+
+									<p:outputLabel for="sexo" value="Sexo:" />
+									<p:selectOneMenu value="#{cadastroBean.pessoa.genero}"
+										id="sexo" disabled="#{cadastroBean.eEditavel}">
+										<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+										<f:selectItems itemLabel="#{genero.descricao}"
+											value="#{cadastroBean.generos}" itemValue="#{genero}"
+											var="genero" />
+									</p:selectOneMenu>
+								</div>
+
+								<div class="field ">
+									<p:outputLabel for="formacao" value="Formação: " />
+									<p:selectOneMenu value="#{cadastroBean.pessoa.formacao}"
+										id="formacao" disabled="#{cadastroBean.eEditavel}">
+										<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+										<f:selectItems itemLabel="#{formacao.descricao}"
+											value="#{cadastroBean.formacao}" itemValue="#{formacao}"
+											var="formacao" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+
+					</p:fieldset>
+
+
+					<!-- Cadastro de Dados Pessoais -->
+
+					<p:fieldset legend="Dados Sociais" class="mt-2">
+						<div class="grid ui-fluid mt-3 ">
+							<div class="col-12 md:col-3">
+
+								<div class="field">
+									<p:outputLabel for="ocupacao" value="Ocupação: " />
+									<p:selectOneMenu label="Selecione..."
+										value="#{cadastroBean.ocupacao.ocupacao}" id="ocupacao"
+										disabled="#{cadastroBean.eEditavel}">
+										<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+										<f:selectItems itemLabel="#{ocupacao.ocupacao}"
+											value="#{cadastroBean.listaOcupacao}"
+											itemValue="#{ocupacao.id}" var="ocupacao" />
+									</p:selectOneMenu>
+								</div>
+
+								<div class="field">
+									<p:outputLabel for="beneficios" value="Beneficios: " />
+									<br />
+									<p:selectCheckboxMenu id="beneficios" dynamic="true"
+										filter="true" filterMatchMode="startsWith" label="beneficios"
+										scrollHeight="250" value="#{cadastroBean.beneficioSel}"
+										converter="beneficioConverter"
+										disabled="#{cadastroBean.eEditavel}">
+
+										<f:selectItems itemLabel="#{beneficios.beneficio}"
+											value="#{cadastroBean.listaBeneficio}" var="beneficios"
+											itemValue="#{beneficios}" />
+									</p:selectCheckboxMenu>
+
+								</div>
+							</div>
+
+							<div class="col-12 md:col-8">
+								<div class="field">
+
+									<p:fieldset legend="Contatos">
+
+										<p:panelGrid columns="4" layout="flex" id="cadastroContato"
+											columnClasses="col-1, col-2 , col-1, col-2 "
+											contentStyleClass="ui-fluid">
+
+											<p:outputLabel value="Contato: " />
+											<p:inputMask id="contato" mask="(99)9 9999-9999"
+												value="#{cadastroBean.contato.telefone}"
+												disabled="#{cadastroBean.eEditavel}" />
+
+											<p:outputLabel for="tipoTelefone" value="Tipo: " />
+											<p:selectOneMenu value="#{cadastroBean.contato.tipoTelefone}"
+												id="tipoTelefone" disabled="#{cadastroBean.eEditavel}"
+												style="width: 8rem">
+												<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+												<f:selectItems itemLabel="#{contatos.descricao}"
+													value="#{cadastroBean.contatos}" itemValue="#{contatos}"
+													var="contatos" />
+											</p:selectOneMenu>
+
+											<p:outputLabel value="Email:" />
+											<p:inputText id="email" type="email" style="width:8rem"
+												value="#{cadastroBean.contato.email}"
+												disabled="#{cadastroBean.eEditavel}" />
+
+											<p:commandLink value="Adicionar"
+												action="#{cadastroBean.gravarContato}"
+												update=" :tabV:cadastro:listaDeContatos :tabV:cadastro:cadastroContato"
+												process="@this :tabV:cadastro:cadastroContato "
+												disabled="#{cadastroBean.eEditavel}"  style="width:6rem"
+												class="ml-4">
+											</p:commandLink>
+
+										</p:panelGrid>
+
+										<p:dataTable value="#{cadastroBean.pessoa.contato}"
+											id="listaDeContatos" var="lista">
+											<p:column>
+												<h:outputText value="#{lista.telefone}" />
+											</p:column>
+											<p:column>
+												<h:outputText value="#{lista.tipoTelefone}" />
+											</p:column>
+											<p:column>
+												<h:outputText value="#{lista.email}" />
+											</p:column>
+											<p:column>
+												<p:commandLink
+													action="#{cadastroBean.removerContato(lista)}" 
+													update=" :tabV:cadastro:listaDeContatos :tabV:cadastro:cadastroContato  "
+													process="@this listaDeContatos" disabled="#{cadastroBean.eEditavel}">
+													<i class="pi pi-times"></i>
+												</p:commandLink>
+												
+											</p:column>
+										</p:dataTable>
+									</p:fieldset>
+								</div>
+							</div>
+						</div>
+					</p:fieldset>
+
+
+					<p:fieldset legend="Endereço" class="mt-2">
+						<div class="grid ui-fluid mt-3 ">
+							<div class="col-12 md:col-6">
+								<div class="field" style="width: 150px">
+									<p:outputLabel for="tpEndereco" value="Tipo de Endereço: " />
+									<p:selectOneMenu value="#{cadastroBean.pessoa.tipoEnd}"
+										id="tpEndereco" disabled="#{cadastroBean.eEditavel}">
+										<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+										<f:selectItems itemLabel="#{tpEndereco.descricao}"
+											value="#{cadastroBean.tipoEnd}" itemValue="#{tpEndereco}"
+											var="tpEndereco" />
+									</p:selectOneMenu>
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="Endereço: " for="endereco" />
+									<p:inputText id="endereco"
+										value="#{cadastroBean.pessoa.endereco}"
+										disabled="#{cadastroBean.eEditavel}" />
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="Numero: " for="numero" />
+									<p:inputText id="numero" value="#{cadastroBean.pessoa.numero}"
+										disabled="#{cadastroBean.eEditavel}" />
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="Bairro:  " for="bairro" />
+									<p:inputText id="bairro" value="#{cadastroBean.pessoa.bairro}"
+										disabled="#{cadastroBean.eEditavel}" />
+								</div>
+							</div>
+
+							<div class="col-12 md:col-6">
+								<div class="field">
+									<p:outputLabel value="CEP: " for="cep" />
+									<p:inputMask id="cep" value="#{cadastroBean.pessoa.cep}"
+										mask="99.999-999" disabled="#{cadastroBean.eEditavel}" />
+								</div>
+
+
+								<div class="field">
+									<p:outputLabel value="Cidade: " for="cidade" />
+									<p:inputText id="cidade" value="#{cadastroBean.pessoa.cidade}"
+										disabled="#{cadastroBean.eEditavel}" />
+								</div>
+
+								<div class="field">
+									<p:outputLabel value="UF:  " for="uf" />
+									<p:inputText id="uf" value="#{cadastroBean.pessoa.estado}"
+										disabled="#{cadastroBean.eEditavel}" />
+								</div>
+							</div>
+						</div>
+
+					</p:fieldset>
+					<p:commandButton value="Gravar" action="#{cadastroBean.gravar}"
+						process="cadastro @this " 
+						update="@all :tabV:cadastro :tabV:formCad:tabelaCadastrados "
+						disabled="#{cadastroBean.eEditavel}" />
+				</h:form>
+
+			</p:tab>
+
+			<!-- TAB LISTA CADASTRADOS -->
+
+			<p:tab title="Lista de Cadastrados" id="tab2">
+
+				<p:fieldset legend="Lista de Cadastrados">
+					<h:form id="formCad">
+
+						<p:dataTable value="#{cadastroBean.lista}" var="lista"
+							id="tabelaCadastrados" paginator="true" rows="10">
+							<p:column sortBy="">
+								<f:facet name="header">Id</f:facet>
+								<h:outputText value="#{lista.id}" />
+							</p:column>
+							<p:column sortBy="">
+								<f:facet name="header">Nome</f:facet>
+								<h:outputText value="#{lista.nome}" />
+							</p:column>
+							<p:column sortBy="">
+								<f:facet name="header">RG</f:facet>
+								<h:outputText value="#{lista.rg}" />
+							</p:column>
+							<p:column sortBy="">
+								<f:facet name="header">CPF</f:facet>
+								<h:outputText value="#{lista.cpf}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Data de Nasc</f:facet>
+								<h:outputText value="#{lista.dataNasc.time}">
+									<f:convertDateTime pattern="dd/MM/yyyy"
+										timeZone="America/Sao_Paulo" />
+								</h:outputText>
+							</p:column>
+
+							<p:column>
+								<f:facet name="header"></f:facet>
+								<p:commandButton value="Visualizar"
+									action="#{cadastroBean.carregarCadastro(lista)}"
+									update=":tabV:cadastro" process="@this"
+									oncomplete="PF('tabIndice').select(0)" />
+
+							</p:column>
+
+							<p:column>
+								<f:facet name="header"></f:facet>
+								<p:commandButton value="Remover"
+									action="#{cadastroBean.removerCadastro(lista)}"
+									process=" @this" update="@form tabelaCadastrados" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</p:fieldset>
+
+			</p:tab>
+		</p:tabView>
+
+
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+</html>

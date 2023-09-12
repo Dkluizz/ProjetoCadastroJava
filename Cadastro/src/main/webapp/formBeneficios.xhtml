@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+				Cadstro de Beneficios
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="cadastro">
+			<p:fieldset legend="Novo Beneficio">
+				<p:messages id="messages" />
+				<p:outputLabel value="Nova Beneficio: " for="beneficio" />
+				<p:inputText id="beneficio"
+					value="#{beneficiosBean.beneficio.beneficio}" class="ml-2"
+					required="true" requiredMessage="Nome Obrigatório"
+					validator="#{validators.validaInput}">
+					<f:ajax event="blur" render="messages" />
+				</p:inputText>
+
+				<p:commandButton value="Gravar" action="#{beneficiosBean.gravar}"
+					class="ml-3" process="@this @form" update="@form :tabelaBeneficios" />
+			</p:fieldset>
+		</h:form>
+
+		<p:fieldset legend="lista de Beneficios" class="mt-5">
+
+			<h:form id="tabelaBeneficios">
+				<p:messages id="messages" />
+				<p:dataTable value="#{beneficiosBean.beneficios}" var="beneficio"
+					id="tabelaBeneficios" paginator="true" rows="10">
+					<p:column sortBy="">
+						<f:facet name="header">Id</f:facet>
+						<h:outputText value="#{beneficio.id}" />
+					</p:column>
+					<p:column sortBy="">
+						<f:facet name="header">Nome</f:facet>
+						<h:outputText value="#{beneficio.beneficio}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Atualizar</f:facet>
+						<p:commandLink value="Visualizar"
+							action="#{beneficiosBean.carregar(beneficio)}" process="@this"
+							update="@form :cadastro" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Remover</f:facet>
+						<p:commandLink value="remover"
+							action="#{beneficiosBean.remover(beneficio)}" process="@this"
+							update="@form" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+		</p:fieldset>
+
+
+
+	</ui:define>
+</ui:composition>
+
+</html>

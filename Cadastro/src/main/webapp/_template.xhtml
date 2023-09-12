@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<link rel="stylesheet"
+	href="https://unpkg.com/primeflex@^3/primeflex.css" />
+
+
+<h:head />
+<h:body style="background-image: url(resource/img/back.jpg)" >
+
+
+	<div id="cabecalho" class="card">
+		<div class=" p-3 ">
+			<h1>
+				<ui:insert name="titulo"></ui:insert>
+			</h1>
+			
+			<p:commandButton value="Cadastro" action="#{cadastroBean.inicio}" immediate="true" style="width:150px" class="mr-3"/>
+			
+			<p:commandButton value="Novo Beneficio" action="#{beneficiosBean.formBeneficios}" immediate="true" style="width:150px" class="mr-3"/>
+			
+			<p:commandButton value="Nova Ocupação" action="#{ocupacaoBean.formOcupacao}" immediate="true" style="width:150px"/>
+			
+		</div>
+	</div>
+
+	<div id="conteudo">
+		<ui:insert name="conteudo">
+		</ui:insert>
+	</div>
+</h:body>
+
+</html>

@@ -1,0 +1,249 @@
+package br.com.cadastro.modelo;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import br.com.cadastro.enum1.Formacao;
+import br.com.cadastro.enum1.Genero;
+import br.com.cadastro.enum1.Nacionalidade;
+import br.com.cadastro.enum1.TipoEndereco;
+
+@Entity
+@Table(name = "cadastro")
+public class Cadastro implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	@Column(name = "nome", length = 100)
+	private String nome;
+	@Column(name = "rg", length = 11)
+	private String rg;
+	@Column(name = "cpf", length = 14)
+	private String cpf;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "tipo_endereco")
+	private TipoEndereco tipoEnd;
+	@Column(name = "endereco", length = 60)
+	private String endereco;
+	@Column(name = "numero_casa", length = 6)
+	private String numero;
+	@Column(name = "bairro", length = 60)
+	private String bairro;
+	@Column(name = "cep", length = 11)
+	private String cep;
+	@Column(name = "cidade", length = 40)
+	private String cidade;
+	@Column(name = "estado", length = 2)
+	private String estado;
+	
+	@Column(name = "formacao")
+	@Enumerated(EnumType.ORDINAL)
+	private Formacao formacao;
+
+	@Column(name = "data_nasc")
+	@Temporal(TemporalType.DATE)
+	private Calendar dataNasc = Calendar.getInstance();
+	
+	@Enumerated(EnumType.ORDINAL)
+	private Genero genero;
+	
+	@Enumerated(EnumType.ORDINAL)
+	private Nacionalidade nacionalidade;
+	
+	@OneToOne
+	private Ocupacao ocupacao;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name="cadastro_id")
+	private List<Contato> contato;
+	
+	@JoinTable(name="cadastro_beneficios",
+            joinColumns={@JoinColumn(name="cadastro_id")},
+            inverseJoinColumns={@JoinColumn(name="beneficios_id")})
+	@ManyToMany(cascade = CascadeType.MERGE)
+	private List<Beneficio> beneficios;
+
+
+	public List<Beneficio> getBeneficios() {
+		return beneficios;
+	}
+	
+
+	public void setBeneficios(List<Beneficio> beneficios) {
+		this.beneficios = beneficios;
+	}
+
+	public List<Contato> getContato() {
+		return contato;
+	}
+	
+	
+	public void adicionarContato(Contato contato) {
+		System.out.println(this.contato);
+		this.contato.add(contato);
+	}
+	
+	public void removerContato(Contato contato) {
+		this.contato.remove(contato);
+	}
+
+	public void setContato(List<Contato> contato) {
+		this.contato = contato;
+	}
+
+	
+
+	public Ocupacao getOcupacao() {
+		return ocupacao;
+	}
+
+
+	public void setOcupacao(Ocupacao ocupacao) {
+		this.ocupacao = ocupacao;
+	}
+
+
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public TipoEndereco getTipoEnd() {
+		return tipoEnd;
+	}
+
+	public void setTipoEnd(TipoEndereco tipoEnd) {
+		this.tipoEnd = tipoEnd;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getRg() {
+		return rg;
+	}
+
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+
+	public Calendar getDataNasc() {
+		return dataNasc;
+	}
+
+	public void setDataNasc(Calendar dataNasc) {
+		this.dataNasc = dataNasc;
+	}
+
+	public Genero getGenero() {
+		return genero;
+	}
+
+	public void setGenero(Genero genero) {
+		this.genero = genero;
+	}
+
+	public Nacionalidade getNacionalidade() {
+		return nacionalidade;
+	}
+
+	public void setNacionalidade(Nacionalidade nacionalidade) {
+		this.nacionalidade = nacionalidade;
+	}
+
+	public Formacao getFormacao() {
+		return formacao;
+	}
+
+	public void setFormacao(Formacao formacao) {
+		this.formacao = formacao;
+	}
+}

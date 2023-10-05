@@ -1,6 +1,7 @@
 package br.com.cadastro.modelo;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,11 +23,10 @@ public class Ocupacao implements Serializable {
 	private String ocupacao;
 	
 
-	public void setId(Integer id) {
+	public Integer setId(Integer id) {
 		this.id = id;
+		return id;
 	}
-
-	
 
 	public String getOcupacao() {
 		return ocupacao;
@@ -39,5 +39,26 @@ public class Ocupacao implements Serializable {
 	public Integer getId() {
 		return id;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, ocupacao);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Ocupacao other = (Ocupacao) obj;
+		return Objects.equals(id, other.id) && Objects.equals(ocupacao, other.ocupacao);
+	}
+	
+	
+
+	
 
 }

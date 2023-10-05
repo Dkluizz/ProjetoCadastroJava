@@ -2,8 +2,8 @@ package br.com.cadastro.enum1;
 
 public enum TipoTelefone {
 
-	CELULAR(1, "Celular"), 
-	TELEFONE(2, "Telefone");
+	CELULAR(0, "Celular"), 
+	TELEFONE(1, "Telefone");
 
 	private final int id;
 	private final String descricao;

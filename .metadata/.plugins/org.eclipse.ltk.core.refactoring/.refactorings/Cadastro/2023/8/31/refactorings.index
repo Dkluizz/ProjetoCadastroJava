@@ -1,0 +1,4 @@
+1690885912227	Encapsulate field 'beneficios'
+1690980662974	Rename field 'listaBeneficios'
+1691176508256	Rename type 'ValidaCpf'
+1691177488232	Rename package 'br.com.cadastro.validator'

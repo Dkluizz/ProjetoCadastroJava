@@ -1,0 +1,55 @@
+package br.com.cadastro.util;
+
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.cadastro.dao.RelatoriosDao;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
+public class GerarReport  {
+	public ResultSet resultSet(String sql) throws SQLException {
+		RelatoriosDao dao = new RelatoriosDao();
+		Connection conexao = dao.getConnection();
+		Statement st = conexao.createStatement();
+		return st.executeQuery(sql);
+	}
+
+	public void geraRelatorio(FacesContext context,HashMap<String, Object> map, String sql) throws JRException, Exception {
+		RelatoriosDao dao = new RelatoriosDao();
+		Connection conexao = dao.getConnection();
+		
+		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		String realPath = context.getExternalContext().getRealPath("WEB-INF/relatorio/");
+		String caminhoRelJasper = realPath + "report.jasper";
+
+		map.put("SUBREPORT_DIR", realPath);
+		map.put("REPORT_CONNECTION", conexao);
+		
+		JRResultSetDataSource ds = new JRResultSetDataSource(resultSet(sql));
+
+		JasperPrint impressao = JasperFillManager.fillReport(caminhoRelJasper, map, ds);
+		
+		byte[] pdf = JasperExportManager.exportReportToPdf(impressao);
+		response.setContentType("application/pdf");
+		response.getOutputStream().write(pdf);
+		response.getCharacterEncoding();
+		context.responseComplete();
+		conexao.close();
+		
+	}
+	
+	
+}

@@ -1,0 +1,45 @@
+package br.com.cadastro.relatorios;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+public class GerarRelatorio implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static void imprimeRelatorio(String relatorioNome, HashMap<String, Object> parametros, List<?> lista) throws JRException, Exception {
+		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lista);
+		FacesContext faces = FacesContext.getCurrentInstance();
+		faces.responseComplete();
+		ServletContext scontext = (ServletContext) faces.getExternalContext().getContext();
+		String path = scontext.getRealPath("/WEB-INF/relatorio/");
+		String caminhoRelJasper = path + "report.jasper";
+		parametros.put("SUBREPORT_DIR", path + File.separator);
+		
+		JasperPrint jasperPrint = JasperFillManager.fillReport(caminhoRelJasper, parametros, dataSource);
+		
+		byte[] b = JasperExportManager.exportReportToPdf(jasperPrint);
+		HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+		res.setContentType("aplication/pdf");
+		res.getOutputStream().write(b);
+		res.getCharacterEncoding();
+		FacesContext.getCurrentInstance().responseComplete();
+		
+	}
+
+}

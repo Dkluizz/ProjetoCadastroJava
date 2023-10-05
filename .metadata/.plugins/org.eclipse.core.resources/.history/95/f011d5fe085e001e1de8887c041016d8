@@ -1,0 +1,86 @@
+package br.com.cadastro.relatorios;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.cadastro.dao.CadastroDao;
+import br.com.cadastro.dao.RelatoriosDao;
+import br.com.cadastro.modelo.Cadastro;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+
+@WebServlet("/relatorio")
+public class RelatorioServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    public RelatorioServlet() {
+      super();
+    }
+
+    protected void doProcess(HttpServletRequest request,
+        HttpServletResponse response) throws ServletException, IOException {
+      RelatoriosDao dao = new RelatoriosDao();
+      CadastroDao cad = new CadastroDao();
+      Connection conexao = dao.getConnection();
+      List<Cadastro> cadastros = cad.listaTodos();
+      JRDataSource data = new JRBeanCollectionDataSource(null);
+
+      ServletOutputStream outputStream = response.getOutputStream();
+
+      String realPath = request.getSession().getServletContext().getRealPath(
+        "/WEB-INF/relatorio")
+        + System.getProperty("file.separator");
+      
+      String caminhoRelJasper = realPath + "report.jasper";
+      
+
+      Map<String, Object> parametros = new HashMap<String, Object>();
+      
+      parametros.put("SUBREPORT_DIR", realPath);
+     
+      parametros.put("REPORT_LOCALE", request.getLocale());
+      
+
+      System.out.println(parametros);
+      JasperPrint impressao = null;
+      try {
+        response.setHeader("Content-Disposition", "inline; filename=\""
+          + "report.pdf" + "\"");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setContentType("application/pdf");
+
+        impressao = JasperFillManager
+          .fillReport(caminhoRelJasper, parametros, );
+        JasperExportManager.exportReportToPdfStream(impressao, outputStream);
+        outputStream.close();
+      }
+      catch (JRException e) {
+        System.out.println(e.getMessage());
+      }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+      doProcess(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+      doProcess(request, response);
+    }
+  }

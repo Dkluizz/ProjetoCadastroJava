@@ -12,14 +12,13 @@ import br.com.cadastro.modelo.Beneficio;
 
 @FacesConverter(value = "beneficioConverter")
 public class BeneficioConverter implements Converter {
-
-
+	
 	@Override
 	public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
+		BeneficiosDao beneficiosDao = new BeneficiosDao(); 
 		
 		if (value != null && value.trim().length() > 0) {
 			try {
-				BeneficiosDao beneficiosDao = new BeneficiosDao();
 				return beneficiosDao.getBeneficioID(Integer.valueOf(value));
 			} catch (NumberFormatException e) {
 				throw new ConverterException(
@@ -38,4 +37,6 @@ public class BeneficioConverter implements Converter {
 			return null;
 		}
 	}
+
+	
 }

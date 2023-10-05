@@ -1,0 +1,73 @@
+package br.com.cadastro.dao;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import br.com.cadastro.enum1.Formacao;
+import br.com.cadastro.enum1.Genero;
+import br.com.cadastro.modelo.Cadastro;
+import br.com.cadastro.modelo.Ocupacao;
+
+public class RelatoriosDao implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private EntityManager em;
+
+	public RelatoriosDao() {
+		em = JPAUtil.getEntityManager();
+	}
+
+	public List<Cadastro> listaBusca(String busca) {
+		List<Cadastro> cadastros = em
+				.createQuery("from Cadastro p where p.nome like '%" + busca + "%' ", Cadastro.class).getResultList();
+		return cadastros;
+	}
+
+	public List<Cadastro> buscaRelatorio(String nome, Formacao formacao, Genero genero, Ocupacao ocupacao,
+			String bairro, String cidade, String estado) {
+		StringBuilder builder = new StringBuilder();
+
+		if (formacao != null) {
+			builder.append(" and p.formacao = " + formacao.getId() + "");
+		}
+
+		if (genero != null) {
+			builder.append(" and p.genero = " + genero.getId() + "");
+		}
+
+		if (bairro != null && bairro != "") {
+			builder.append(" and p.bairro  like '%" + bairro + "%'");
+		}
+
+		if (cidade != null && cidade != "") {
+			builder.append(" and p.cidade  like '%" + cidade + "%'");
+		}
+
+		if (estado != null && estado != "") {
+			builder.append(" and p.estado  like '%" + estado + "%'");
+		}
+
+		List<Cadastro> cadastros = em
+
+				.createQuery("select p from Cadastro p where p.nome like '"
+						+ "%" + nome + "%'" + builder + "",
+						Cadastro.class)
+				.getResultList();
+
+		return cadastros;
+	}
+
+	public Connection getConnection() {
+		try {
+			return DriverManager.getConnection("jdbc:mysql://localhost/cadastro_pessoal", "root", "1234");
+		} catch(SQLException e){
+			throw new RuntimeException(e);
+		}
+	}
+}

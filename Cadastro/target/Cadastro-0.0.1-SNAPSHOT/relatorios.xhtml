@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+				Relatórios
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="relatorio">
+
+
+			<p:fieldset legend="Novo Relatório">
+				<p:messages id="messages" />
+
+				<div class="grid ui-fluid mt-3 ">
+					<div class="col-12 md:col-4">
+						<div class="field">
+							<p:outputLabel value="Nome: " for="nome" />
+							<p:inputText id="nome" value="#{relatoriosBean.cadastro.nome}" 
+								validator="#{validators.validaInput}">
+								<f:ajax event="blur" render="messages" />
+							</p:inputText>
+						</div>
+						<div class="field">
+							<p:outputLabel value="Estado " for="estado" />
+							<p:inputText id="estado" value="#{relatoriosBean.cadastro.estado}" 
+								validator="#{validators.validaInput}">
+								<f:ajax event="blur" render="messages" />
+							</p:inputText>
+						</div>
+
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field">
+							<p:outputLabel for="nacionalidade " value="Cor: " />
+							<p:selectOneMenu value="#{relatoriosBean.cadastro.nacionalidade}"
+								id="nacionalidade" disabled="#{cadastroBean.eEditavel}">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems itemLabel="#{nacionalidade.descricao}"
+									value="#{cadastroBean.nacionalidades}"
+									itemValue="#{nacionalidade}" var="nacionalidade" />
+							</p:selectOneMenu>
+						</div>
+
+
+						<div class="field ">
+
+							<p:outputLabel for="sexo" value="Sexo:" />
+							<p:selectOneMenu value="#{relatoriosBean.cadastro.genero}" id="sexo"
+								disabled="#{cadastroBean.eEditavel}">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems itemLabel="#{genero.descricao}"
+									value="#{cadastroBean.generos}" itemValue="#{genero}"
+									var="genero" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field ">
+							<p:outputLabel for="formacao" value="Formação: " />
+							<p:selectOneMenu value="#{relatoriosBean.cadastro.formacao}"
+								id="formacao" disabled="#{cadastroBean.eEditavel}">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems itemLabel="#{formacao.descricao}"
+									value="#{cadastroBean.formacao}" itemValue="#{formacao}"
+									var="formacao" />
+							</p:selectOneMenu>
+						</div>
+
+						<div class="field">
+							<p:outputLabel for="ocupacao" value="Ocupação: " />
+							<p:selectOneMenu label="Selecione..."
+								value="#{relatoriosBean.ocupacao.ocupacao}" id="ocupacao"
+								disabled="#{cadastroBean.eEditavel}">
+								<f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+								<f:selectItems itemLabel="#{ocupacao.ocupacao}"
+									value="#{cadastroBean.listaOcupacao}"
+									itemValue="#{ocupacao.id}" var="ocupacao" />
+							</p:selectOneMenu>
+						</div>
+
+
+					</div>
+				</div>
+				<p:commandButton value="listar"
+					action="#{relatoriosBean.filtroRelatorio}" process="@this @form"
+					update="@form :buscaDeRelatorio:listaFiltrada" />
+			</p:fieldset>
+
+		</h:form>
+
+		<p:fieldset legend="lista de Cadastrados Pesquisados" class="mt-5">
+
+			<h:form id="buscaDeRelatorio">
+				<p:messages id="messages" />
+				<p:dataTable value="#" var="relatorio" id="listaFiltrada"
+					paginator="true" rows="10">
+					<p:column sortBy="">
+						<f:facet name="header">Id</f:facet>
+						<h:outputText value="" />
+					</p:column>
+					<p:column sortBy="">
+						<f:facet name="header">Nome</f:facet>
+						<h:outputText value="" />
+					</p:column>
+					<p:column sortBy="">
+						<f:facet name="header">Ocupação</f:facet>
+						<h:outputText value="" />
+					</p:column>
+					<p:column sortBy="">
+						<f:facet name="header">Escolaridade</f:facet>
+						<h:outputText value="" />
+					</p:column>
+					<p:column sortBy="">
+						<f:facet name="header">Genero</f:facet>
+						<h:outputText value="" />
+					</p:column>
+
+
+				</p:dataTable>
+			</h:form>
+
+		</p:fieldset>
+
+
+
+	</ui:define>
+</ui:composition>
+
+</html>

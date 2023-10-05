@@ -1,0 +1,73 @@
+package br.com.cadastro.teste;
+
+import javax.persistence.EntityManager;
+
+import br.com.cadastro.dao.CadastroDao;
+import br.com.cadastro.dao.ContatoDao;
+import br.com.cadastro.dao.DadosDao;
+import br.com.cadastro.dao.JPAUtil;
+import br.com.cadastro.enum1.Beneficios;
+import br.com.cadastro.enum1.Formacao;
+import br.com.cadastro.enum1.Nacionalidade;
+import br.com.cadastro.enum1.Ocupacao;
+import br.com.cadastro.enum1.Sexo;
+import br.com.cadastro.enum1.TipoEndereco;
+import br.com.cadastro.enum1.TipoTelefone;
+import br.com.cadastro.modelo.Cadastro;
+import br.com.cadastro.modelo.Contato;
+import br.com.cadastro.modelo.Dados;
+
+public class PopulaBanco {
+		public static void main(String[] args) {
+			
+			Cadastro cadPessoal= new Cadastro();
+			
+			Contato contato = new Contato();
+			
+			Dados dados = new Dados();
+			
+			
+			
+			cadPessoal.setNome("Luiz Felipe");
+			cadPessoal.setCpf("12053890673");
+			cadPessoal.setRg(18414090);
+			cadPessoal.setSexo(Sexo.MASCULINO);
+			cadPessoal.setNacionalidade(Nacionalidade.PARDO);
+			
+			contato.setTp(TipoTelefone.CELULAR);
+			contato.setPhone(999655170);
+			
+			dados.setFormacao(Formacao.ENS_SUPERIOR_COMPLETO);
+			System.out.println(Formacao.ENS_SUPERIOR_COMPLETO);
+			dados.setOcupacao(Ocupacao.PROGRAMADOR);
+			System.out.println(Ocupacao.PROGRAMADOR);
+			dados.setBeneficios(Beneficios.VALE_REFEICA0);
+			
+			cadPessoal.setEndereco("D");
+			cadPessoal.setBairro("Jardim Aeroporto");
+			cadPessoal.setCidade("Bocaiuva");
+			cadPessoal.setNumero(20);
+			cadPessoal.setTipoEnd(TipoEndereco.RUA);
+			cadPessoal.setEstado("MG");
+			cadPessoal.setCep(39390000);
+			
+			
+			EntityManager em = JPAUtil.getEntityManager(); 
+			CadastroDao cadDao = new CadastroDao(em);
+			ContatoDao contatoDao = new ContatoDao(em);
+			DadosDao dadosDao = new DadosDao(em);
+			
+			
+			em.getTransaction().begin();
+			cadDao.cadastrar(cadPessoal);
+			contatoDao.cadastrar(contato);
+			dadosDao.cadastrar(dados);
+			cadDao.cadastrar(cadPessoal);
+			em.getTransaction().commit();
+			em.close();
+		
+		
+		
+		}
+	
+}

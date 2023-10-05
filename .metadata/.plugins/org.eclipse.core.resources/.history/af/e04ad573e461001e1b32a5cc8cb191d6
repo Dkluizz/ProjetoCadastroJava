@@ -1,0 +1,8 @@
+package br.com.cadastro.relatorios;
+
+public class GerarRelatorio2  {
+	
+	private static Map<String, Object> createReport(list<Cadastro> cadastro)
+	
+
+}

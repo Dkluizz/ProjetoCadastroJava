@@ -1,0 +1,15 @@
+package br.com.cadastro.relatorios;
+
+import java.util.List;
+import java.util.Map;
+
+import br.com.cadastro.modelo.Cadastro;
+
+public class GerarRelatorio2  {
+	
+	private static Map<String, Object> createReport(List<Cadastro> cadastro){
+		
+	}
+	
+
+}

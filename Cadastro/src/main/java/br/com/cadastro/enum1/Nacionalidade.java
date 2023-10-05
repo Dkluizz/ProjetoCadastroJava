@@ -2,11 +2,11 @@ package br.com.cadastro.enum1;
 
 public enum Nacionalidade {
 	
-	NEGRO(1, "Negro"),
-	PARDO(2, "Pardo"),
-	BRANCO(3, "Branco"),
-	AMARELO(4, "Amarelo"),
-	INDIGENA(5, "Indigena");
+	NEGRO(0, "Negro"),
+	PARDO(1, "Pardo"),
+	BRANCO(2, "Branco"),
+	AMARELO(3, "Amarelo"),
+	INDIGENA(4, "Indigena");
 
 	private final int id;
 	private final String descricao;

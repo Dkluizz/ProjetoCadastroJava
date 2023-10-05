@@ -2,9 +2,9 @@ package br.com.cadastro.enum1;
 
 public enum Genero {
 	
-	MASCULINO(1, "Masculino"), 
-	FEMININO(2, "Feminino"), 
-	NÃO_DECLARADO(3, "Não Declarado");
+	MASCULINO(0, "Masculino"), 
+	FEMININO(1, "Feminino"), 
+	NÃO_DECLARADO(2, "Não Declarado");
 
 	private final int id;
 	private final String descricao;

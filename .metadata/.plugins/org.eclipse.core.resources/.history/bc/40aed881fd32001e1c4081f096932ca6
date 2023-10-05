@@ -1,0 +1,45 @@
+package br.com.cadastro.validator;
+
+import java.io.Serializable;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
+
+@ManagedBean
+public class Validators implements Serializable {
+	
+	
+	private static final long serialVersionUID = 1L;
+
+	
+	public  void validaInput(FacesContext fc, UIComponent component,
+			Object value) throws ValidatorException {
+		
+		String valor = value.toString();
+		
+		if (!valor.matches("\\D+") ) {
+			throw new ValidatorException(new FacesMessage(
+					"Não deve conter numeros!"));
+		}else if(valor.length()<4){
+			throw new ValidatorException(new FacesMessage(
+					"Limite minimo de caracteres: 4!"));
+		}else if(valor.length()>40) {
+			throw new ValidatorException(new FacesMessage(
+					"Limite maximo de caracteres: 40!"));
+		}
+	}
+	
+	public void validarCPF(FacesContext fc, UIComponent component, Object value) throws ValidatorException  {
+		String cpf = value.toString();
+		Boolean cpfValidado = ValidaCPF.isCPF(cpf);
+		
+		if(cpfValidado != true) {
+			throw new ValidatorException(new FacesMessage(
+					"CPF digitado é invalido!"));
+		}
+	}
+
+}

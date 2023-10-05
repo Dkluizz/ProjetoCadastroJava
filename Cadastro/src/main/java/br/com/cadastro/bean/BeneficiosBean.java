@@ -1,25 +1,30 @@
 package br.com.cadastro.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.transaction.Transactional;
 
 import br.com.cadastro.dao.BeneficiosDao;
 import br.com.cadastro.modelo.Beneficio;
 
 @ManagedBean
-@ViewScoped
-public class BeneficiosBean {
+@RequestScoped
+public class BeneficiosBean implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
+	BeneficiosDao beneficioDao = new BeneficiosDao();
+	
 	private Beneficio beneficio = new Beneficio();
 	@SuppressWarnings("unused")
 	private List<Beneficio> beneficios;
 	
-
-
+	
 	public Beneficio getBeneficio() {
 		return beneficio;
 	}
@@ -32,10 +37,9 @@ public class BeneficiosBean {
 		return "formBeneficios?faces-redirect=true";
 
 	}
-	
+	@Transactional
 	public void gravar() {
 		
-		BeneficiosDao beneficioDao = new BeneficiosDao();
 		
 		if(beneficio.getId() == null) {
 			System.out.println("gravando");
@@ -49,17 +53,14 @@ public class BeneficiosBean {
 		this.beneficio = new Beneficio();
 
 	}
-	
 	public List<Beneficio> getBeneficios(){
-		BeneficiosDao beneficioDao = new BeneficiosDao();
 		List<Beneficio> beneficios = beneficioDao.listaTodos();
 		return beneficios;
 	}
 	
 	public void remover(Beneficio beneficio) {
 		try {
-			BeneficiosDao ocpDao = new BeneficiosDao();
-			ocpDao.remover(beneficio);
+			beneficioDao.remover(beneficio);
 		} catch (Exception e) {
 			e.getMessage();
 			FacesContext.getCurrentInstance().addMessage("beneficio",
@@ -67,6 +68,7 @@ public class BeneficiosBean {
 			return;
 		}
 	}
+	
 	
 	public void carregar(Beneficio beneficio){
 		

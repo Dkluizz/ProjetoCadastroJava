@@ -1,0 +1,28 @@
+1689864821080	Encapsulate field 'phone'
+1689864892307	Rename type 'DadosPessoais'
+1689864897752	Rename type 'CadastroPessoa'
+1689865209813	Move compilation units
+1689865220942	Delete element
+1689873921694	Copy compilation unit
+1689873983143	Copy package
+1689874009898	Delete element
+1689876356268	Rename package 'br.com.cadastro.Bean'
+1689876369622	Rename package 'br.com.cadastro.Enum'
+1689877430077	Rename resource 'formCadastro.xhtml'
+1689879403049	Rename resource 'cadastroPessoal.xhtml'
+1689942789681	Delete element
+1689942795507	Rename resource 'teste.xhtml'
+1689943242874	Encapsulate field 'id'
+1689945431004	Rename type 'EndereçoPessoal'
+1689946553186	Encapsulate field 'cpf'
+1689948453532	Rename type 'DAO'
+1689949743588	Copy compilation unit
+1689949765642	Copy compilation unit
+1689949778178	Copy compilation unit
+1689951061860	Rename compilation unit 'Sex.java'
+1689951092048	Rename compilation unit 'Sexo.java'
+1689959571368	Rename type 'Sex'
+1689959800393	Encapsulate field 'nome'
+1689959990482	Encapsulate field 'descricao'
+1689960295017	Rename compilation unit 'TypePhone.java'
+1689960411646	Rename type 'TypeAdress'

@@ -1,0 +1,28 @@
+package br.com.cadastro.relatorios;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import br.com.cadastro.modelo.Cadastro;
+
+public class GerarRelatorio2  {
+	
+	private static Map<String, Object> createReport(Cadastro cadastro){
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nome", cadastro.getNome());
+		map.put("formacao", cadastro.getFormacao());
+		map.put("genero", cadastro.getGenero());
+		map.put("ocupacao", cadastro.getOcupacao());
+		map.put("bairro", cadastro.getBairro());
+		map.put("cidade", cadastro.getCidade());
+		map.put("estado", cadastro.getEstado());
+		
+		
+		
+		return map;
+	}
+	
+
+}

@@ -1,0 +1,59 @@
+package br.com.cadastro.util;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.cadastro.dao.RelatoriosDao;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
+public class GerarReport  {
+	public ResultSet resultSet(String sql) throws SQLException {
+		RelatoriosDao dao = new RelatoriosDao();
+		Connection conexao = dao.getConnection();
+		Statement st = conexao.createStatement();
+		return st.executeQuery(sql);
+	}
+
+	public void geraRelatorio(FacesContext context, ServletContext servlet, String busca) throws JRException, Exception {
+		RelatoriosDao dao = new RelatoriosDao();
+		Connection conexao = dao.getConnection();
+		
+		HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+		String realPath = servlet.getRealPath("/WEB-INF/relatorio/") + System.getProperty("file.separator");
+
+		String caminhoRelJasper = realPath + "report.jasper";
+
+		Map<String, Object> parametros = new HashMap<String, Object>();
+
+		parametros.put("SUBREPORT_DIR", realPath);
+		parametros.put("REPORT_LOCALE", parametros);
+		parametros.put("REPORT_CONNECTION", conexao);
+		
+		JRResultSetDataSource ds = new JRResultSetDataSource(resultSet(busca));
+
+		JasperPrint impressao = JasperFillManager.fillReport(caminhoRelJasper, new HashMap<>(), ds);
+
+		byte[] pdf = JasperExportManager.exportReportToPdf(impressao);
+		
+		res.setContentType("application/pdf");
+		res.getOutputStream().write(pdf);
+		res.getCharacterEncoding();
+		context.responseComplete();
+		conexao.close();
+	}
+	
+	
+}

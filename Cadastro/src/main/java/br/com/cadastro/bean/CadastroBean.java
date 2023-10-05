@@ -29,20 +29,48 @@ public class CadastroBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Cadastro pessoa = new Cadastro();
+	private CadastroDao cad = new CadastroDao();
+	private BeneficiosDao beneficiosDao = new BeneficiosDao();
+	private OcupacaoDao ocupacaoDao = new OcupacaoDao();
 
 	private List<Cadastro> cadastros;
 
 	private List<Beneficio> beneficioSel = new ArrayList<Beneficio>();
+	private List<Beneficio> beneficioCad = new ArrayList<Beneficio>();
 
 	private Contato contato = new Contato();
 	private List<Contato> listaContatos = new ArrayList<Contato>();
 
 	private Ocupacao ocupacao = new Ocupacao();
-
 	private Integer cadId;
 	private Boolean eEditavel = false;
+	private String busca;
 
 	// GETTERS e SETTERS
+
+	
+	
+	public String getBusca() {
+		return busca;
+	}
+
+	
+
+	public List<Beneficio> getBeneficioCad() {
+		return beneficioCad;
+	}
+
+
+
+	public void setBeneficioCad(List<Beneficio> beneficioCad) {
+		this.beneficioCad = beneficioCad;
+	}
+
+
+
+	public void setBusca(String busca) {
+		this.busca = busca;
+	}
 
 	public Boolean geteEditavel() {
 		return eEditavel;
@@ -122,7 +150,6 @@ public class CadastroBean implements Serializable {
 	}
 
 	// METODOS
-
 	public void gravar() {
 		CadastroDao cad = new CadastroDao();
 
@@ -139,9 +166,8 @@ public class CadastroBean implements Serializable {
 
 			// Verifica Beneficio
 			
-			pessoa.setBeneficios(beneficioSel);
-			
-			
+				pessoa.setBeneficios(beneficioSel);
+
 			// Verifica Contato
 			if (pessoa.getContato() == null) {
 				FacesContext.getCurrentInstance().addMessage("contatos",
@@ -161,14 +187,17 @@ public class CadastroBean implements Serializable {
 						new FacesMessage("Não possui ocupação selecionada"));
 				return;
 			}
+			
 			pessoa.setOcupacao(ocupacao);
 			pessoa.setBeneficios(beneficioSel);
+			System.out.println(pessoa.getBeneficios());
 			cad.atualiza(pessoa);
 		}
 
 		this.pessoa = new Cadastro();
 		this.ocupacao = new Ocupacao();
-		this.contato = new Contato();
+		this.listaContatos = new ArrayList<>();
+		this.beneficioSel = new ArrayList<>();
 
 	}
 
@@ -176,17 +205,15 @@ public class CadastroBean implements Serializable {
 		eEditavel = false;
 
 	}
-
 	public void carregarCadastro(Cadastro cadastro) {
 		this.pessoa = cadastro;
 		this.ocupacao.setOcupacao(pessoa.getOcupacao().getId().toString());
-		System.out.println(cadastro.getOcupacao().getId());
+//		this.beneficioSel = pessoa.getBeneficios();
 		eEditavel = true;
 	}
 
 	public void removerCadastro(Cadastro cadastro) {
-		CadastroDao cadDao = new CadastroDao();
-		cadDao.remover(cadastro);
+		cad.remover(cadastro);
 		cadastros.remove(cadastro);
 	}
 
@@ -207,28 +234,34 @@ public class CadastroBean implements Serializable {
 	// FIM METODOS
 
 	// LISTAGEM
-	public List<Cadastro> getlista() {
-		CadastroDao cad = new CadastroDao();
+	public List<Cadastro> getLista() {
 
-		if (this.cadastros == null) {
+		if (cadastros == null) {
 			cadastros = cad.listaTodos();
 		}
+
 		return cadastros;
 
 	}
 
-	public List<Beneficio> getlistaBeneficio() {
-		BeneficiosDao cad = new BeneficiosDao();
-		List<Beneficio> beneficios = cad.listaTodos();
+	public List<Cadastro> buscaLista() {
 
+		if (this.busca != null || this.busca != "") {
+			cadastros = cad.listaBusca(busca);
+		} else {
+			cadastros = cad.listaTodos();
+		}
+		return cadastros;
+	}
+
+	public List<Beneficio> getlistaBeneficio() {
+		List<Beneficio> beneficios = beneficiosDao.listaTodos();
 		return beneficios;
 
 	}
 
 	public List<Ocupacao> getlistaOcupacao() {
-		OcupacaoDao cad = new OcupacaoDao();
-		List<Ocupacao> ocupacoes = cad.listaTodos();
-
+		List<Ocupacao> ocupacoes = ocupacaoDao.listaTodos();
 		return ocupacoes;
 
 	}

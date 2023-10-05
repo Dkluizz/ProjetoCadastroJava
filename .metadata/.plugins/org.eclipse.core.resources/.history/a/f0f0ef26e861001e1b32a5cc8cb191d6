@@ -1,0 +1,43 @@
+package br.com.cadastro.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.FileSystems;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+
+import br.com.cadastro.dao.RelatoriosDao;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
+public class GerarRelatorio  {
+	
+	 public ResultSet getResultSet(String SQL) throws Exception {
+	        ResultSet result = getBanco().executeQuery(SQL);
+	        return result;
+	    }
+	
+	public byte[] gerarRelatorioBytes(FacesContext context,String SQL,Map<String, Object> parametro, String titulo, String modeloRel){
+		RelatoriosDao dao = new RelatoriosDao();
+        String pathRel = context.getExternalContext().getRealPath("WEB-INF/relatorios/");
+        byte[] pdf=null;
+        Connection conn = dao.getConnection();
+          	File fileModel = new File(pathRel+"/"+modeloRel);
+			System.err.println("file model: " + fileModel.toPath());
+			
+			parametro.put("SUBREPORT_DIR", fileModel.getParent() + FileSystems.getDefault().getSeparator());
+			
+        	parametro.put("REPORT_CONNECTION", conn);
+        	parametro.put("SUBREPORT_DIR",pathRel+"/");
+            JRResultSetDataSource resultJR = new JRResultSetDataSource(getResultSet(SQL));
+            FileInputStream fis = new FileInputStream(new File(pathRel+"/"+modeloRel));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(fis, parametro,resultJR);
+            pdf = JasperExportManager.exportReportToPdf(jasperPrint);
+        
+        }
+}

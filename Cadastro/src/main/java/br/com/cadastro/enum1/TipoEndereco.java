@@ -1,9 +1,9 @@
 package br.com.cadastro.enum1;
 
 public enum TipoEndereco {
-	AVENIDA(1, "Avenida"),
-	RUA(2, "Rua"),
-	CONDOMINIO(3, "Condominio");
+	AVENIDA(0, "Avenida"),
+	RUA(1, "Rua"),
+	CONDOMINIO(2, "Condominio");
 	
 	private final int id;
 	private final String descricao;

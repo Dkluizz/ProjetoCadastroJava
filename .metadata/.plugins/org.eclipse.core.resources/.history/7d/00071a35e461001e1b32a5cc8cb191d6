@@ -1,0 +1,11 @@
+package br.com.cadastro.relatorios;
+
+import java.io.Serializable;
+
+public class GerarRelatorio2 implements Serializable {
+	
+	
+
+	
+
+}

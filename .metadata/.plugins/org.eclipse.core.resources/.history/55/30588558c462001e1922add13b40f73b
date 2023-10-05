@@ -1,0 +1,215 @@
+package br.com.cadastro.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import br.com.cadastro.dao.RelatoriosDao;
+import br.com.cadastro.enum1.Formacao;
+import br.com.cadastro.enum1.Genero;
+import br.com.cadastro.enum1.Nacionalidade;
+import br.com.cadastro.modelo.Cadastro;
+import br.com.cadastro.modelo.Ocupacao;
+import br.com.cadastro.relatorios.GerarRelatorio;
+import br.com.cadastro.util.GerarReport;
+import br.com.cadastro.util.GerarReport3;
+import net.sf.jasperreports.engine.JRException;
+
+@ManagedBean
+@ViewScoped
+
+public class RelatoriosBean implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private Cadastro cadastro = new Cadastro();
+
+	private RelatoriosDao relatorios = new RelatoriosDao();
+	private List<Cadastro> cadastros = new ArrayList<>();
+
+	private String nome;
+	private Formacao formacao;
+	private Genero genero;
+	private Ocupacao ocupacao;
+	private Nacionalidade nacionalidade;
+	private String bairro;
+	private String cidade;
+	private String estado;
+
+	public Nacionalidade getNacionalidade() {
+		return nacionalidade;
+	}
+
+	public void setNacionalidade(Nacionalidade nacionalidade) {
+		this.nacionalidade = nacionalidade;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public RelatoriosDao getRelatorios() {
+
+		return relatorios;
+	}
+
+	public void setRelatorios(RelatoriosDao relatorios) {
+		this.relatorios = relatorios;
+	}
+
+	public List<Cadastro> getCadastros() {
+		return cadastros;
+	}
+
+	public void setCadastros(List<Cadastro> cadastros) {
+		this.cadastros = cadastros;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Formacao getFormacao() {
+		return formacao;
+	}
+
+	public void setFormacao(Formacao formacao) {
+		this.formacao = formacao;
+	}
+
+	public Genero getGenero() {
+		return genero;
+	}
+
+	public void setGenero(Genero genero) {
+		this.genero = genero;
+	}
+
+	public Ocupacao getOcupacao() {
+		return ocupacao;
+	}
+
+	public void setOcupacao(Ocupacao ocupacao) {
+		this.ocupacao = ocupacao;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public Cadastro getCadastro() {
+		return cadastro;
+	}
+
+	public void setCadastro(Cadastro cadastro) {
+		this.cadastro = cadastro;
+	}
+
+	public String formRelatorio() {
+		return "relatorios?faces-redirect=true";
+	}
+
+	
+	public List<Cadastro> filtroRelatorio() {
+		cadastros = relatorios.buscaRelatorio(nome, formacao, genero, ocupacao, bairro, cidade, estado);
+
+		return cadastros;
+	}
+
+	public void gerarSQL() throws JRException, Exception {
+		FacesContext faces = FacesContext.getCurrentInstance();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		GerarReport report = new GerarReport();
+		StringBuilder builder = new StringBuilder();
+		
+		if (formacao != null) {
+			builder.append(" and cadastro.formacao = " + formacao.getId() + "");
+		}
+
+		if (genero != null) {
+			builder.append(" and cadastro.genero = " + genero.getId() + "");
+		}
+
+		if (bairro != null && bairro != "") {
+			builder.append(" and cadastro.bairro  like '%" + bairro + "%'");
+		}
+
+		if (cidade != null && cidade != "") {
+			builder.append(" and cadastro.cidade  like '%" + cidade + "%'");
+		}
+
+		if (estado != null && estado != "") {
+			builder.append(" and cadastro.estado  like '%" + estado + "%'");
+		}
+
+		String sql = ("select nome, id, bairro, cidade, estado, formacao, cep, cpf, nacionalidade, numero_casa, rg, "
+				+ "tipo_endereco, ocupacao_id, data_nasc, endereco, "
+				+ "genero from cadastro where cadastro.nome like '" + "%" + nome + "%'" + builder + "");
+		
+		report.geraRelatorio(faces,map, sql.toString());
+	}
+
+	public void geraRelatorio() throws JRException, Exception {
+		HashMap<String, Object> parametros = new HashMap<String, Object>();
+		GerarRelatorio.imprimeRelatorio("report.jasper", parametros);
+	}
+	
+	public void relatorio () {
+		FacesContext faces = FacesContext.getCurrentInstance();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		GerarReport3 report = new GerarReport3();
+		StringBuilder builder = new StringBuilder();
+		
+		if (formacao != null) {
+			builder.append(" and cadastro.formacao = " + formacao.getId() + "");
+		}
+
+		if (genero != null) {
+			builder.append(" and cadastro.genero = " + genero.getId() + "");
+		}
+
+		if (bairro != null && bairro != "") {
+			builder.append(" and cadastro.bairro  like '%" + bairro + "%'");
+		}
+
+		if (cidade != null && cidade != "") {
+			builder.append(" and cadastro.cidade  like '%" + cidade + "%'");
+		}
+
+		if (estado != null && estado != "") {
+			builder.append(" and cadastro.estado  like '%" + estado + "%'");
+		}
+
+		String sql = ("select nome, id, bairro, cidade, estado, formacao, cep, cpf, nacionalidade, numero_casa, rg, "
+				+ "tipo_endereco, ocupacao_id, data_nasc, endereco, "
+				+ "genero from cadastro where cadastro.nome like '" + "%" + nome + "%'" + builder + "");
+		String arquivo = "report.jasper";
+		report.gerarRelatorio(faces,map, sql.toString(),arquivo );
+	}
+
+}

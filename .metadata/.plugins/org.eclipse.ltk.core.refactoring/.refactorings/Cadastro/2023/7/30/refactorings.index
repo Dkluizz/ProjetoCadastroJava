@@ -1,0 +1,41 @@
+1690200955343	Delete element
+1690200970243	Rename resource 'formCadastro.xhtml'
+1690201025752	Rename resource 'Index.xhtml'
+1690201138667	Rename resource 'index.xhtml'
+1690201361862	Rename resource 'inicio.xhtml'
+1690205279745	Rename field 'nation'
+1690205295234	Rename type 'Nation'
+1690224564888	Encapsulate field 'cadId'
+1690226865441	Delete element
+1690226983987	Delete element
+1690228035282	Rename type 'CadastroPessoal'
+1690228045913	Rename type 'ContatoPessoal'
+1690228060217	Rename type 'DadosSociais'
+1690228174696	Rename type 'DadosSociaisDao'
+1690281197570	Delete element
+1690281288117	Move 'back.jpg' to 'img'
+1690281619153	Move 'resource' to 'webapp'
+1690285210411	Encapsulate field 'id'
+1690285625925	Delete element
+1690293007207	Rename type 'CadastroDao'
+1690294390025	Rename type 'DAO'
+1690368751690	Copy compilation unit
+1690368889647	Copy compilation unit
+1690368897246	Rename type 'ContatoDao'
+1690369828117	Rename type 'Dados'
+1690371197888	Encapsulate field 'email'
+1690371720340	Rename type 'Beneficios'
+1690371737047	Encapsulate field 'beneficio'
+1690371954387	Rename type 'Ocupacao'
+1690371961169	Rename type 'Beneficios'
+1690371967833	Rename type 'Formacao'
+1690375598806	Rename type 'DadosSociaisBean'
+1690375611131	Rename type 'EndereçoPessoalBean'
+1690463362462	Encapsulate field 'descricao'
+1690464676028	Rename type 'Ocupação'
+1690464807822	Rename type 'Beneficios'
+1690464823097	Rename type 'DadosDao'
+1690465473253	Rename resource 'formDadosPessoais.xhtml'
+1690485641403	Rename type 'Sexo'
+1690487634782	Rename type 'FormacaoE'
+1690568287934	Rename type 'ContatoPessoalBean'

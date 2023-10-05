@@ -65,7 +65,7 @@ public class RelatoriosDao implements Serializable {
 
 	public Connection getConnection() {
 		try {
-			return DriverManager.getConnection("jdbc:mysql://localhost/cadastro_pessoal", "root", "1234");
+			return DriverManager.getConnection("jdbc:mysql://localhost/", "", "");
 		} catch(SQLException e){
 			throw new RuntimeException(e);
 			
